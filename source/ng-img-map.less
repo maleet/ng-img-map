@@ -36,7 +36,8 @@ body{
         left: 0;
         width: 40px;
         height: 40px;
-        background-color: rgba(0, 0, 0, 0.3);
+        background-color: rgba(0, 0, 255, 0.3);
+        border-radius: 50px;
 
         &:hover{
             .bar-remove{
@@ -95,7 +96,7 @@ body{
         } 
         &.ord-e{
             cursor: e-resize; 
-            width: 8px; height: 100%; 
+            width: 8px; height: 100%;
             right: -4px; top: 0;
             &:before{width: 1px; height: 100%; right: 4px;}
         }
@@ -116,22 +117,22 @@ body{
     .dragdot{
         background-color: #ccc;
         border: 1px solid #333;
-        width: 8px;
-        height: 8px;
+        width: 12px;
+        height: 12px;
         font-size: 0;
 
         &.ord-n, &.ord-e, &.ord-w, &.ord-s{z-index: @map-drag-zindex; }
         &.ord-nw, &.ord-ne, &.ord-sw, &.ord-se{z-index: @map-drag-zindex + 2; }
 
-        &.ord-n{top:    -4px; left: 50%; margin-left: -4px; }
-        &.ord-s{bottom: -4px; left: 50%; margin-left: -4px; }
-        &.ord-e{right: -4px; top: 50%; margin-top: -4px; }
-        &.ord-w{left:  -4px; top: 50%; margin-top: -4px; }
+        &.ord-n{top:    -6px; left: 50%; margin-left: -6px; }
+        &.ord-s{bottom: -6px; left: 50%; margin-left: -6px; }
+        &.ord-e{right: -6px; top: 50%; margin-top: -6px; }
+        &.ord-w{left:  -6px; top: 50%; margin-top: -6px; }
 
-        &.ord-nw{cursor: nw-resize; top: -4px; left:  -4px; }
-        &.ord-ne{cursor: ne-resize; top: -4px; right: -4px; }
-        &.ord-sw{cursor: sw-resize; bottom: -4px; left:  -4px; }
-        &.ord-se{cursor: se-resize; bottom: -4px; right: -4px; }
+        &.ord-nw{cursor: nw-resize; top: -6px; left:  -6px; }
+        &.ord-ne{cursor: ne-resize; top: -6px; right: -6px; }
+        &.ord-sw{cursor: sw-resize; bottom: -6px; left:  -6px; }
+        &.ord-se{cursor: se-resize; bottom: -6px; right: -6px; }
     }
 
     .dragbar{

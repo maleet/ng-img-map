@@ -13,7 +13,7 @@ var config = {
     name: 'ng-img-map',
     source: 'source/**/*',
     compile: 'compile'
-}
+};
 
 // css concat/minify
 gulp.task('css', function() {

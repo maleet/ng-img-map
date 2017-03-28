@@ -5,133 +5,50 @@
     <title>DEMO - ngImgMap</title>
     <link rel="stylesheet" href="compile/ng-img-map.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.28/angular.min.js"></script>
-    <script src="compile/ng-img-map.min.js"></script>
+    <script src="source/ng-img-map.js"></script>
+    <script src="index.js"></script>
+    <script src="node_modules/ngtouch/build/ngTouch.min.js"></script>
+
 </head>
 
 <body ng-app="ngImgMapDemo" ng-controller="DemoCtrl" style="min-width:1200px;">
 
-    <div style="float:right;width:600px;padding:20px;">
-        <div>Live Data</div>
-        <pre>{{imgJson}}</pre>
+<div style="float:right;width:600px;padding:20px;">
+    <div>Live Data</div>
+    <pre>{{imgJson}}</pre>
+</div>
+
+<div style="min-width:600px;padding:30px 600px 0 0;">
+    <div ng-img-map ng-img-map-fns="mapFns" ng-model="img"></div>
+
+    <div style="width:400px;margin:auto;">
+        <button ng-click="addArea(img)" style="margin-top: 20px;">add area</button>
+        <dl>
+            <dt>custom attr in data, such as 'description'</dt>
+            <dd ng-repeat="m in img.maps" style="margin: 5px 0;">
+                area {{$index+1}}:
+                <input type="text" ng-model="m.description" ng-focus="catchArea(m)" ng-blur="releaseArea(m)"/>
+                <input type="text" ng-model="m.link_url" ng-focus="catchArea(m)" ng-blur="releaseArea(m)"/>
+            </dd>
+        </dl>
     </div>
 
-    <div style="min-width:600px;padding:30px 600px 0 0;">
-        <div ng-img-map ng-img-map-fns="mapFns" ng-model="img"></div>
-
-        <div style="width:400px;margin:auto;">
-            <button ng-click="addArea(img)" style="margin-top: 20px;">add area</button>
-            <dl>
-                <dt>custom attr in data, such as 'description'</dt>
-                <dd ng-repeat="m in img.maps" style="margin: 5px 0;">
-                    area {{$index+1}}: 
-                    <input type="text" ng-model="m.description" ng-focus="catchArea(m)" ng-blur="releaseArea(m)" />
-                    <input type="text" ng-model="m.link_url" ng-focus="catchArea(m)" ng-blur="releaseArea(m)" />
-                </dd>
-            </dl>
+    <div style="text-align:center;margin-top:50px;">
+        <h3>使用实例：点击对应man的head ~</h3>
+        <div>
+            <img ng-src="{{img.pic_url}}" usemap="#ImgExam">
+            <map name="ImgExam">
+                <area style="outline: red solid 2px;"
+                      shape="rect" coords="{{area.coords.join()}}"
+                      ng-repeat="area in img.maps"
+                      ng-href="{{area.link_url || 'javascript:void(0)'}}"
+                      title="{{area.description}}"
+                      target="_blank"></area>
+            </map>
         </div>
-
-        <div style="text-align:center;margin-top:50px;">
-            <h3>使用实例：点击对应man的head ~</h3>
-            <div>
-                <img ng-src="{{img.pic_url}}" usemap="#ImgExam">
-                <map name="ImgExam">
-                    <area style="outline: red solid 2px;"
-                          shape="rect" coords="{{area.coords.join()}}"
-                          ng-repeat="area in img.maps" 
-                          ng-href="{{area.link_url || 'javascript:void(0)'}}" 
-                          title="{{area.description}}" 
-                          target="_blank"></area>
-                </map>
-            </div>
-        </div>
-        
     </div>
 
-
-    <script type="text/javascript">
-    (function() {
-        var app = angular.module('ngImgMapDemo', ['ngImgMap']);
-
-        app.controller('DemoCtrl', function($scope) {
-
-            // ================= 必须配置 =================
-
-            // 最基础的数据格式如下, description为自定义属性
-            $scope.img = {
-                "pic_url": "images/demo-400x300.png",
-                "maps": [
-                    {"coords":[45, 52, 160, 216], "description": "I am batman", "link_url": "https://www.baidu.com/s?ie=utf-8&fr=bks0000&wd=BATMAN"},
-                    {"coords":[242, 19, 343,169], "description": "I am superman", "link_url": "https://www.baidu.com/s?ie=utf-8&fr=bks0000&wd=SUPERMAN"}
-                ]
-            };
-
-
-
-            // ================= 必须配置 =================
-
-            // 配置方法集
-            $scope.mapFns = {
-                // 获取画布尺寸
-                getCanSize: function() {
-                    return [950, 1000];
-                },
-                // 获取图像尺寸
-                getImgSize: function(img) {
-                    return _getImgSize(img.pic_url) || [950, 500];
-                }
-            };
-
-            // 获取图片宽高
-            function _getImgSize(url) {
-                var reg = new RegExp('(\\d+)x(\\d+)\.');
-                result = reg.exec(url);
-                if (result && result.length > 1) {
-                    return result.slice(1);
-                } else {
-                    return false;
-                }
-            }
-
-            // 添加锚点
-            $scope.addArea = function(img) {
-                if (!img || !img.maps || !angular.isArray(img.maps)) {
-                    img = angular.isObject(img) ? img : {};
-                    img.maps = [];
-                };
-                var calculation = img.getCalculation(),
-                    lastImg = img.maps.slice(-1)[0],
-                    lastImgLeft = lastImg ? lastImg.coords[0] : 0,
-                    lastImgTop = lastImg ? lastImg.coords[1] : 0,
-                    newImgCoords = [lastImgLeft + 30, lastImgTop + 30, lastImgLeft + 100, lastImgTop + 100];
-
-                if (calculation) {
-                    img.maps.push({coords: calculation.checkCoords(newImgCoords) });
-                } else {
-                    img.maps.push({coords: newImgCoords });
-                }
-            };
-
-            // =================== 优化功能 ===================
-
-            // 编辑link时，激活对应选区
-            $scope.catchArea = function(area){area.isDraging = true;};
-
-            // 离开编辑link时，反激活对应选区
-            $scope.releaseArea = function(area){
-                if (area.hasOwnProperty('isDraging')) {
-                    delete area.isDraging
-                };
-            };
-
-            // ================== imgJson ===================
-            $scope.$watch('img', function(nVal, oVal){
-                $scope.imgJson = angular.toJson(nVal, true);
-            }, true);
-
-        });
-
-    })();
-    </script>
+</div>
 </body>
 
 </html>
