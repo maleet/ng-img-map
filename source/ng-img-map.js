@@ -254,6 +254,7 @@
 
                    if (angular.isDefined(m)) {
                        angular.forEach(m.maps, function (area) {
+                           area.ratio = ratio;
                            calculation.checkCoords(area.coords);
                        })
                    }
@@ -357,7 +358,8 @@
                    restrict: 'EA',
                    scope: {
                        ngImgMapFns: "=ngImgMapFns",
-                       ngModel: "=ngModel"
+                       ngModel: "=ngModel",
+                       readOnly: "="
                    },
                    templateUrl: 'ngImgMap.html',
                    controller: 'ngImgMapCtrl'
@@ -365,7 +367,7 @@
            }])
 
            .run(['$templateCache', function ($templateCache) {
-               var template = '<div class="img-map-wrapper" ng-mousemove="trackMouse($event)" ng-style="wrapperStyle">' +
+               var template = '<div class="img-map-wrapper" ng-class="{readonly: readOnly}" ng-mousemove="trackMouse($event)" ng-style="wrapperStyle">' +
                    '    <div ng-repeat="area in m.maps" class="map-area"  ng-mousedown="catchArea($event, area)" ng-touchmove="trackTouchMove($event)" ng-touchstart="catchTouchArea($event, area)"' +
                    ' ng-class="{draging: area.isDraging}"' +
                    ' ng-style="getAreaStyle(area)">' +

@@ -48,6 +48,11 @@ body *:after {
 .img-map-wrapper .draging .dragbar .bar-remove {
   display: none;
 }
+.img-map-wrapper.readonly .dragbar,
+.img-map-wrapper.readonly .dragline,
+.img-map-wrapper.readonly .dragdot {
+  visibility: hidden;
+}
 .img-map-wrapper .dragline,
 .img-map-wrapper .dragdot {
   position: absolute;

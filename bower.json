@@ -1,0 +1,30 @@
+{
+  "name": "ng-img-map",
+  "version": "1.0.1",
+  "description": "to draw map-area on an image with angularJS",
+  "main": "compile/ng-img-map.min.js",
+  "authors": [
+    "Thunf",
+    "Mart Leet"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "img",
+    "draw",
+    "map",
+    "area"
+  ],
+  "homepage": "https://github.com/maleet/ng-img-map",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "1.5.0",
+    "ngtouch": "^1.0.1"
+  }
+}

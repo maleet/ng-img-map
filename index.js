@@ -1,18 +1,20 @@
-(function () {
+(function (angular) {
     var app = angular.module('ngImgMapDemo', ['ngImgMap']);
 
     app.controller('DemoCtrl', function ($scope) {
-
         $scope.img = {
-            "pic_url": "images/demo-400x300.png", "maps": [
-                {"coords": [ 61,
-                    137,
-                    118,
-                    186], "description": "I am batman"},
-                {"coords": [240,
-                    47,
-                    341,
-                    135], "description": "I am superman"}
+            "pic_url": "images/demo-400x300.png",
+            "maps": [
+                {
+                    "coords": [61, 137, 118, 186],
+                    "ratio": 1,
+                    "description": "I am batman"
+                },
+                {
+                    "coords": [240, 47, 341, 135],
+                    "ratio": 1,
+                    "description": "I am superman"
+                }
             ]
         };
 
@@ -26,6 +28,16 @@
                 return _getImgSize(img.pic_url) || [950, 500];
             }
         };
+
+        $scope.mapFnsLowerRatio = {
+            getCanSize: function (img) {
+                return [200, 150];
+            },
+
+            getImgSize: function (img) {
+                return _getImgSize(img.pic_url) || [950, 500];
+            }
+        }
 
         function _getImgSize(url) {
             var reg = new RegExp('(\\d+)x(\\d+)\.');
@@ -68,4 +80,4 @@
 
     });
 
-})();
+})(angular);
