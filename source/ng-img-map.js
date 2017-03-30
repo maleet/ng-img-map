@@ -309,6 +309,11 @@
                    }
                };
 
+               $scope.stopMove = function (e, area) {
+                   delete area.isDraging;
+                   localArea = undefined;
+               };
+
                $scope.removeArea = function (map, index) {
                    if (angular.isDefined(map[index])) {
                        map.splice(index, 1);
@@ -357,7 +362,7 @@
            .run(['$templateCache', function ($templateCache) {
                var template = '<div class="img-map-wrapper" ng-class="{readonly: readOnly}" ng-mousemove="trackMove($event)" ng-style="wrapperStyle">' +
                    '    <div ng-repeat="area in m.maps" class="map-area"  ng-mousedown="catchArea($event, area)" ng-touchmove="trackMove($event)" ng-touchstart="catchArea($event, area)"' +
-                   ' ng-class="{draging: area.isDraging}"' +
+                   ' ng-class="{draging: area.isDraging}" ng-touchend="stopMove($event, area)"' +
                    ' ng-style="getAreaStyle(area)">' +
                    '        <div class="dragbar">' + '            <div class="bar-title">{{$index+1}}</div>' +
                    '            <div class="bar-remove" ng-click="removeArea(m.maps, $index)">&times;</div>' + '            <div class="bar-size">{{getCurSize(area.coords)}}</div>' +
