@@ -224,7 +224,7 @@
 
            .controller('ngImgMapCtrl', ['$scope', 'ngImgMapCalculation', 'ngImgMapCurArea', function ($scope, ngImgMapCalculation, ngImgMapCurArea) {
 
-               var curArea = ngImgMapCurArea, localArea = null, fn, m, imgSize, canSize, calculation, ratio;
+               var curArea = $scope.curArea = ngImgMapCurArea, localArea = null, fn, m, imgSize, canSize, calculation, ratio;
 
                function init() {
                    fn = $scope.ngImgMapFns;
@@ -365,7 +365,8 @@
                    ' ng-class="{draging: area.isDraging}" ng-touchend="stopMove($event, area)"' +
                    ' ng-style="getAreaStyle(area)">' +
                    '        <div class="dragbar">' + '            <div class="bar-title">{{$index+1}}</div>' +
-                   '            <div class="bar-remove" ng-click="removeArea(m.maps, $index)">&times;</div>' + '            <div class="bar-size">{{getCurSize(area.coords)}}</div>' +
+                   '            <div ng-if="curArea.area == area" class="bar-remove" ng-click="removeArea(m.maps, $index)" ng-touchstart="removeArea(m.maps, $index)">&times;</div>' + '            <div' +
+                   ' class="bar-size">{{getCurSize(area.coords)}}</div>' +
                    '            <div class="bar-coords">{{area.coords}}</div>' + '        </div>' + '        <div class="ord-n dragline"></div>' + '        <div class="ord-e dragline"></div>' +
                    '        <div class="ord-s dragline"></div>' + '        <div class="ord-w dragline"></div>' + '        <div class="ord-n dragdot"></div>' +
                    '        <div class="ord-e dragdot"></div>' + '        <div class="ord-s dragdot"></div>' + '        <div class="ord-w dragdot"></div>' +
