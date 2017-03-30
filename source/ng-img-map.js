@@ -50,8 +50,11 @@
                    this.img = [this.imgw, this.imgh];
 
                    this.canw = Math.min(img[0], can[0]);
+                   this.canh = Math.min(img[1], can[1]);
 
-                   this.ratio = (img[0] && this.canw) ? (this.canw / img[0]) : 1;
+                   this.ratioh = (img[1] && this.canh) ? (this.canh / img[1]) : 1;
+                   this.ratiow = (img[0] && this.canw) ? (this.canw / img[0]) : 1;
+                   this.ratio = Math.min(this.ratioh, this.ratiow);
                };
 
                calculation.prototype.init = function (action, curArea, pos) {
@@ -282,7 +285,10 @@
                    if (angular.isDefined(area) && area.coords) {
                        localArea = area;
                        curArea.area = area;
-                       curArea.mouse = [e.pageX, e.pageY];
+
+                       var event = getEventWithPositions(e);
+
+                       curArea.mouse = [event.pageX, event.pageY];
                        curArea.action = calculation.getDragAction(e.target['className']);
                        if (['move', 'resize'].indexOf(curArea.action[0]) > -1) {
                            curArea.area.isDraging = true;
@@ -290,43 +296,16 @@
                    }
                };
 
-               $scope.catchTouchArea = function (e, area) {
-
-                   e.preventDefault();
-                   e.stopPropagation();
-                   if (angular.isDefined(area) && area.coords) {
-                       localArea = area;
-                       curArea.area = area;
-                       var touch = e.touches[0];
-                       curArea.mouse = [touch.pageX, touch.pageY];
-                       curArea.action = calculation.getDragAction(e.target['className']);
-                       if (['move', 'resize'].indexOf(curArea.action[0]) > -1) {
-                           curArea.area.isDraging = true;
-                       }
-                   }
-               };
-
-               $scope.trackTouchMove = function (e) {
+               $scope.trackMove = function (e) {
                    e.stopPropagation();
                    if (localArea != curArea.area) {
                        return;
                    }
                    var action = curArea.action;
                    if (angular.isDefined(curArea.area) && angular.isDefined(action[0]) && curArea.area.coords) {
-
-                       var touch = e.touches[0];
-                       calculation.init(action, curArea, [touch.pageX, touch.pageY]);
-                   }
-               };
-
-               $scope.trackMouse = function (e) {
-                   e.stopPropagation();
-                   if (localArea != curArea.area) {
-                       return;
-                   }
-                   var action = curArea.action;
-                   if (angular.isDefined(curArea.area) && angular.isDefined(action[0]) && curArea.area.coords) {
-                       calculation.init(action, curArea, [e.pageX, e.pageY]);
+                       // jquery wrapper
+                       var event = getEventWithPositions(e);
+                       calculation.init(action, curArea, [event.pageX, event.pageY]);
                    }
                };
 
@@ -351,6 +330,15 @@
                    return [w, h].join(' * ');
                }
 
+               function getEventWithPositions(e) {
+                   // jquery wrapper
+                   var event = e.originalEvent || e;
+
+                   if (event.type == "touchstart" || event.type == "touchmove") {
+                       event = e.touches[0];
+                   }
+                   return event;
+               }
            }])
 
            .directive('ngImgMap', ['$timeout', function ($timeout) {
@@ -367,8 +355,8 @@
            }])
 
            .run(['$templateCache', function ($templateCache) {
-               var template = '<div class="img-map-wrapper" ng-class="{readonly: readOnly}" ng-mousemove="trackMouse($event)" ng-style="wrapperStyle">' +
-                   '    <div ng-repeat="area in m.maps" class="map-area"  ng-mousedown="catchArea($event, area)" ng-touchmove="trackTouchMove($event)" ng-touchstart="catchTouchArea($event, area)"' +
+               var template = '<div class="img-map-wrapper" ng-class="{readonly: readOnly}" ng-mousemove="trackMove($event)" ng-style="wrapperStyle">' +
+                   '    <div ng-repeat="area in m.maps" class="map-area"  ng-mousedown="catchArea($event, area)" ng-touchmove="trackMove($event)" ng-touchstart="catchArea($event, area)"' +
                    ' ng-class="{draging: area.isDraging}"' +
                    ' ng-style="getAreaStyle(area)">' +
                    '        <div class="dragbar">' + '            <div class="bar-title">{{$index+1}}</div>' +
