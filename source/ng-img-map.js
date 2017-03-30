@@ -335,7 +335,7 @@
                    var event = e.originalEvent || e;
 
                    if (event.type == "touchstart" || event.type == "touchmove") {
-                       event = e.touches[0];
+                       event = event.touches[0];
                    }
                    return event;
                }
