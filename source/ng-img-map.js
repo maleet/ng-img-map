@@ -322,12 +322,13 @@
 
                $scope.getAreaStyle = function (area) {
                    var coords = area.coords || [10, 10, 50, 50];
-                   return {
+                   var style = area.style || {};
+                   return angular.extend(style, {
                        width: parseInt(Math.abs(coords[0] - coords[2]) * ratio) + 'px',
                        height: parseInt(Math.abs(coords[1] - coords[3]) * ratio) + 'px',
                        left: parseInt(Math.min(coords[0], coords[2]) * ratio) + 'px',
                        top: parseInt(Math.min(coords[1], coords[3]) * ratio) + 'px'
-                   };
+                   });
                };
 
                $scope.getCurSize = function (c) {
